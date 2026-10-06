@@ -1,0 +1,29 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  windows-installer:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - name: Build the installer (unsigned)
+        run: npx electron-builder --win nsis --publish never
+        env:
+          MOONLAND_RELEASE_DIR: release
+      - uses: actions/upload-artifact@v4
+        id: upload-unsigned
+        with:
+          name: installer-unsigned
+          path: release/MoonLand-Setup-*.exe

@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https://mc-heads.net data:; style-src 'self'; script-src 'self'; font-src 'self'">
+<title>MoonLand</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<canvas id="sky"></canvas>
+
+<section id="login" class="screen" hidden>
+  <header class="bar">
+    <div class="brand"><svg viewBox="0 0 14 14" aria-hidden="true" shape-rendering="crispEdges"><path fill="currentColor" d="M4 1h2v1H4zM3 2h2v1H3zM2 3h3v1H2zM1 4h3v1H1zM1 5h3v1H1zM1 6h4v1H1zM1 7h4v1H1zM1 8h5v1H1zM1 9h6v1H1zM2 10h10v1H2zM3 11h8v1H3zM4 12h6v1H4z"/></svg>MoonLand</div>
+    <div class="win">
+      <button id="minLogin" aria-label="Свернуть"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 5h8" stroke="currentColor" stroke-width="1.2"/></svg></button>
+      <button id="clsLogin" aria-label="Закрыть"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1.5 1.5l7 7M8.5 1.5l-7 7" stroke="currentColor" stroke-width="1.2"/></svg></button>
+    </div>
+  </header>
+  <div class="login-grid">
+    <div class="col">
+      <h1>Вход</h1>
+      <p class="lead">Ник и пароль те же, что на сайте и в игре.</p>
+      <form id="loginForm" novalidate>
+        <label>Ник<input id="u" autocomplete="username" maxlength="16" spellcheck="false" required></label>
+        <label>Пароль<input id="p" type="password" autocomplete="current-password" required></label>
+        <p id="loginErr" class="err" role="alert" hidden></p>
+        <button id="loginBtn" class="btn btn-moon" type="submit">Войти</button>
+        <a class="link" href="https://moonlandmc.ru/register" target="_blank">Нет аккаунта? Зарегистрируйтесь на сайте!</a>
+      </form>
+    </div>
+    <figure class="moon"><canvas data-moon></canvas><figcaption class="moon-caption"></figcaption></figure>
+  </div>
+</section>
+
+<div id="shell" hidden>
+  <aside class="side">
+    <div class="brand"><svg viewBox="0 0 14 14" aria-hidden="true" shape-rendering="crispEdges"><path fill="currentColor" d="M4 1h2v1H4zM3 2h2v1H3zM2 3h3v1H2zM1 4h3v1H1zM1 5h3v1H1zM1 6h4v1H1zM1 7h4v1H1zM1 8h5v1H1zM1 9h6v1H1zM2 10h10v1H2zM3 11h8v1H3zM4 12h6v1H4z"/></svg>MoonLand</div>
+    <nav>
+      <button id="navHome" class="navlink active"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg>Играть</button>
+      <button id="navNews" class="navlink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Новости</button>
+      <a class="navlink" href="https://discord.gg/r3bWUCUbvw" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.3 5.3a17 17 0 0 0-4.1-1.3l-.2.4a15 15 0 0 1 3.6 1.2 15.6 15.6 0 0 0-13.2 0 15 15 0 0 1 3.7-1.2l-.2-.4a17 17 0 0 0-4.1 1.3C2.6 9 2 12.6 2.3 16.2a17 17 0 0 0 4.9 2.5l.7-1.1a11 11 0 0 1-1.7-.8l.4-.3a12.4 12.4 0 0 0 10.8 0l.4.3a11 11 0 0 1-1.7.8l.7 1.1a17 17 0 0 0 4.9-2.5C22 12.6 21.4 9 19.3 5.3ZM9 14.3c-.8 0-1.5-.8-1.5-1.7S8.1 11 9 11s1.5.7 1.5 1.6-.7 1.7-1.5 1.7Zm6 0c-.8 0-1.5-.8-1.5-1.7S14.2 11 15 11s1.5.7 1.5 1.6-.7 1.7-1.5 1.7Z"/></svg>Discord</a>
+      <a class="navlink" href="https://moonlandmc.ru" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16v16H4zM4 9h16M9 9v11"/></svg>Сайт</a>
+      <a class="navlink" href="https://moonlandmc.ru/wiki" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 19.5A2.5 2.5 0 0 0 6.5 22H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15Z"/></svg>Вики</a>
+      <div class="navsplit"></div>
+      <button id="navSettings" class="navlink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>Настройки</button>
+    </nav>
+    <button id="acct" class="side-foot" aria-label="Аккаунт и настройки">
+      <img id="sideFace" alt="" width="36" height="36">
+      <div><b id="sideNick"></b><small>Аккаунт</small></div>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+    </button>
+  </aside>
+
+  <main>
+    <div class="top">
+      <span id="ver" class="ver"></span>
+      <div class="win">
+        <button id="min" aria-label="Свернуть"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 5h8" stroke="currentColor" stroke-width="1.2"/></svg></button>
+        <button id="cls" aria-label="Закрыть"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1.5 1.5l7 7M8.5 1.5l-7 7" stroke="currentColor" stroke-width="1.2"/></svg></button>
+      </div>
+    </div>
+    <div class="content">
+      <section id="home" class="pane">
+        <div class="hero-row">
+          <div class="who"><img id="face" alt="" width="44" height="44"><div><div id="nick" class="nick"></div></div></div>
+          <div class="live-pill"><span class="live-dot"></span>Сейчас в игре <b id="online">…</b></div>
+        </div>
+        <div class="hero">
+          <h1 class="title">MoonLand</h1>
+        </div>
+        <div id="vkOffer" class="offer" hidden>
+          <b>У вас видеокарта AMD <span id="vkGpu" class="muted"></span></b>
+          <p>Для таких видеокарт есть режим Vulkan, в нём игра может идти быстрее. Режим экспериментальный, шейдеров в нём нет. Вернуться можно в настройках.</p>
+          <div class="offer-btns"><button id="vkOn" class="btn btn-moon" type="button">Включить Vulkan</button><button id="vkNo" class="btn btn-line" type="button">Не сейчас</button></div>
+        </div>
+      </section>
+
+      <section id="news" class="pane" hidden>
+        <h1>Новости</h1>
+        <p class="lead">Новости и обновления сервера. Нажмите на карточку, чтобы прочитать.</p>
+        <div id="newsGrid" class="news-grid" hidden></div>
+        <p id="newsEmpty" class="lead" hidden>Пока пусто. Загляните позже или откройте сайт.</p>
+        <p class="news-site"><a class="link" href="https://moonlandmc.ru/updates" target="_blank">Все обновления на сайте</a></p>
+        <div id="reader" class="reader" hidden>
+          <div class="reader-box" role="dialog" aria-modal="true" aria-labelledby="readerTitle">
+            <button id="readerClose" class="reader-x" type="button" aria-label="Закрыть">×</button>
+            <span id="readerTag" class="tag"></span>
+            <h2 id="readerTitle"></h2>
+            <time id="readerDate"></time>
+            <div id="readerBody" class="reader-body"></div>
+            <div class="reader-foot">
+              <a id="readerSite" class="link" href="https://moonlandmc.ru/updates" target="_blank">Все обновления на сайте</a>
+              <a id="readerDiscord" class="link dim" href="#" target="_blank">Открыть в Discord</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="settings" class="pane" hidden>
+        <h1>Настройки</h1>
+        <div class="row perf-row"><span>Производительность <b id="perfMsg" class="muted"></b><small id="perfInfo" class="perf-info"></small></span><div id="perfSeg" class="seg"><button type="button" data-p="auto">Авто</button><button type="button" data-p="low">Слабый</button><button type="button" data-p="medium">Средний</button><button type="button" data-p="high">Мощный</button><button type="button" data-p="custom">Свои</button></div></div>
+        <label class="row">Память подбирается автоматически <input id="memAuto" type="checkbox" class="switch"></label>
+        <label class="row">Память для игры <span class="mem"><input id="mem" type="range" min="2048" max="12288" step="512"> <b id="memVal"></b></span></label>
+        <div class="row"><span>Графика <b id="gfxMsg" class="muted"></b></span><div id="gfxSeg" class="seg"><button type="button" data-g="standard">Стандартная</button><button id="gfxVk" type="button" data-g="vulkan">Vulkan</button></div></div>
+        <label class="row">Показывать игру в Discord <input id="dc" type="checkbox" class="switch"></label>
+        <div class="row"><span>Папка игры</span><button id="openDir" class="btn btn-line">Открыть</button></div>
+        <div class="row"><span>Лаунчер <b id="updMsg" class="muted"></b></span><button id="checkUpd" class="btn btn-line">Проверить обновления</button></div>
+        <div class="row"><span>Файлы игры <b id="verifyMsg" class="muted"></b></span><button id="verify" class="btn btn-line">Проверить целостность</button></div>
+        <h2 class="set-head">Скин</h2>
+        <p class="skin-lead">PNG-файл 64×64 или 64×32. Скин увидят все игроки сервера.</p>
+        <div class="skin-grid">
+          <div class="skin-stage"><canvas id="skinView" width="16" height="32" aria-label="Предпросмотр скина"></canvas></div>
+          <div class="skin-form">
+            <div class="row"><span>Файл <b id="skinFile" class="muted">не выбран</b></span><button id="skinPick" class="btn btn-line">Выбрать файл</button></div>
+            <div class="row"><span>Руки</span>
+              <span class="seg" id="skinVariant"><button data-v="classic" class="on">Обычные</button><button data-v="slim">Тонкие</button></span></div>
+            <div class="skin-actions"><button id="skinApply" class="btn btn-moon" disabled>Установить скин</button><span id="skinMsg" class="skin-msg"></span></div>
+            <p class="skin-note">Менять скин можно раз в сутки. Новый скин появится на сервере сразу, а в игре у тех, кто рядом, после перезахода.</p>
+          </div>
+        </div>
+        <div class="row"><span>Аккаунт <b id="setNick" class="muted"></b></span><button id="logout" class="btn btn-line danger">Выйти</button></div>
+      </section>
+    </div>
+    <div id="playbar" class="playbar">
+      <div class="pb-info">
+        <b id="pbTitle">MoonLand</b>
+        <span id="pbSub" class="pb-sub">Сервер moonlandmc.ru</span>
+        <div id="prog" class="prog" hidden><span id="stage"></span> <span id="count"></span><div class="pbar"><i id="barFill"></i></div></div>
+        <p id="homeErr" class="err" role="alert" hidden></p>
+        <div id="upd" class="upd" hidden><span id="updText"></span><button id="updBtn" class="upd-btn">Перезапустить</button></div>
+      </div>
+      <button id="play" class="btn btn-moon btn-play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg><span id="playLabel">Играть</span></button>
+    </div>
+  </main>
+</div>
+<script type="module" src="renderer.js"></script>
+</body>
+</html>

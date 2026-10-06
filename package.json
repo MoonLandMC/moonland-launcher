@@ -1,0 +1,31 @@
+{
+  "name": "moonland-launcher",
+  "version": "1.0.6",
+  "private": true,
+  "description": "MoonLand launcher",
+  "author": "MoonLand",
+  "main": "dist/main/main.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.main.json && tsc -p tsconfig.renderer.json && node scripts/copy-static.mjs",
+    "dev": "npm run build && electron .",
+    "test": "vitest run",
+    "dist": "npm run build && electron-builder --win nsis --publish never",
+    "release": "npm run build && electron-builder --win nsis --publish always"
+  },
+  "dependencies": {
+    "@xhayper/discord-rpc": "1.5.1",
+    "adm-zip": "^0.5.16",
+    "electron-updater": "^6.8.9",
+    "minecraft-launcher-core": "3.18.2"
+  },
+  "devDependencies": {
+    "@types/adm-zip": "^0.5.7",
+    "@types/node": "^22.10.0",
+    "electron": "44.4.5",
+    "electron-builder": "^26.0.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  },
+  "license": "MIT",
+  "homepage": "https://moonlandmc.ru/wiki/launcher"
+}

@@ -4,6 +4,7 @@ import { Client, Authenticator } from 'minecraft-launcher-core';
 import { gameDir } from './paths';
 import { serverHost, isDev } from './config';
 import { serversDat } from './servers';
+import { ensureKeyDefaults } from './keys';
 
 export type LaunchOptions = {
   javaPath: string; versionId: string; mcVersion: string; username: string; password: string; memoryMb: number;
@@ -31,6 +32,7 @@ export async function launchGame(
     const text = fs.readFileSync(options, 'utf8');
     if (text.includes('onboardAccessibility:true')) fs.writeFileSync(options, text.replace('onboardAccessibility:true', 'onboardAccessibility:false'));
   }
+  ensureKeyDefaults(options);
   const host = serverHost();
   const servers = path.join(gameDir(), 'servers.dat');
   if (!fs.existsSync(servers)) fs.writeFileSync(servers, serversDat('MoonLand', host));

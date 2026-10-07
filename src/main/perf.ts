@@ -48,11 +48,11 @@ export function autoMemoryMb(h: Hardware, tier: Tier): number {
 export const initialHeapMb = (tier: Tier, memoryMb: number): number => Math.min(memoryMb, { low: 1024, medium: 2048, high: 4096 }[tier]);
 
 /**
- * Опции Java. Уровни выбраны так, чтобы не требовать ничего сверх Java 21, которую ставит лаунчер:
- * слабый и средний ПК остаются на G1 (на малом числе ядер его потоки не мешают игре), мощный получает поколенческий ZGC с короткими паузами.
+ * Опции Java. Все уровни остаются на G1: он работает на любой Java 21 и на любом железе.
+ * Поколенческий ZGC раньше стоял у «мощного» уровня, но на реальном ПК (16 потоков, RTX 4060) пинг в игре был выше, чем с G1,
+ * поэтому его убрали, пока он не проверен измерениями. У мощного уровня те же флаги, что у среднего, меняется только размер кучи.
  */
 export function jvmArgs(tier: Tier): string[] {
-  if (tier === 'high') return ['-XX:+UseZGC', '-XX:+ZGenerational'];
   const g1 = ['-XX:+UnlockExperimentalVMOptions', '-XX:+UseG1GC', '-XX:+ParallelRefProcEnabled', '-XX:MaxGCPauseMillis=50', '-XX:G1NewSizePercent=20', '-XX:G1ReservePercent=20'];
   if (tier === 'low') return g1;
   return [...g1, '-XX:G1HeapRegionSize=8M', '-XX:InitiatingHeapOccupancyPercent=15', '-XX:SurvivorRatio=32', '-XX:MaxTenuringThreshold=1'];

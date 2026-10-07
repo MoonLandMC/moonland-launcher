@@ -21,12 +21,15 @@ npx electron-builder --win nsis --publish never
 
 ## Что лаунчер отправляет и куда
 
-- На https://moonlandmc.ru: ник и пароль при входе (проверка через тот же аккаунт, что и в игре), новости, число игроков онлайн, скин при его загрузке. Пароль на диске хранится зашифрованным средствами системы (Electron safeStorage).
-- На GitHub (MoonLandMC): список файлов сборки игры и сами файлы, обновления лаунчера.
+- На https://moonlandmc.ru: ник и пароль при входе и при запуске игры (проверка через тот же аккаунт, что и в игре), новости, число игроков онлайн, скин при его загрузке. Пароль на диске хранится зашифрованным средствами системы (Electron safeStorage).
+- На GitHub (MoonLandMC): список файлов сборки игры, сами файлы и обновления лаунчера.
+- На cdn.modrinth.com: файлы модов сборки.
+- В Mojang: файлы игры Minecraft (адреса выбирает библиотека minecraft-launcher-core).
 - На meta.fabricmc.net и api.adoptium.net: загрузчик Fabric и Java.
+- На mc-heads.net: запрос аватара для главного экрана, при этом передаётся ваш ник.
 - В Discord на этом же компьютере: статус «В лаунчере» или «Играет», если вы оставили эту настройку включённой.
 
-Лаунчер не собирает аналитику и ничего не отправляет на другие адреса.
+Объём памяти, число ядер и название видеокарты лаунчер определяет на вашем компьютере, чтобы подобрать настройки, и никуда их не отправляет. Лаунчер не собирает аналитику.
 
 Установка идёт в профиль пользователя без прав администратора. Удаление: «Параметры Windows, Приложения, MoonLand».
 
@@ -36,7 +39,7 @@ Free code signing provided by [SignPath.io](https://about.signpath.io/), certifi
 
 - Only installers built from this repository by the GitHub Actions workflow in `.github/workflows` are signed. Nothing else is signed.
 - Committers and reviewers: the MoonLand team, [MoonLandMC](https://github.com/MoonLandMC). Approver: the repository owner.
-- Privacy: see "Что лаунчер отправляет и куда" above. The launcher sends no data to any system other than the ones listed there.
+- Privacy: see "Что лаунчер отправляет и куда" above. The launcher sends no data to any system other than the ones listed there. The same list is on https://moonlandmc.ru/wiki/launcher#privacy.
 
 ## Лицензия
 

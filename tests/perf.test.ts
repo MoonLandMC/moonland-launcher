@@ -55,11 +55,10 @@ describe('memory and jvm', () => {
       expect(a.findIndex(x => x.startsWith('-XX:G1NewSizePercent'))).toBeGreaterThan(unlock);
     }
   });
-  it('high uses generational ZGC and no G1 flags', () => {
-    const a = jvmArgs('high');
-    expect(a).toContain('-XX:+UseZGC'); expect(a).toContain('-XX:+ZGenerational');
-    expect(a.some(x => /G1/.test(x))).toBe(false);
+  it('no tier uses ZGC: it made in-game ping worse on a real strong PC', () => {
+    for (const t of ['low', 'medium', 'high'] as const) expect(jvmArgs(t).some(a => /ZGC|ZGenerational/.test(a))).toBe(false);
   });
+  it('high and medium share the G1 flags', () => { expect(jvmArgs('high')).toEqual(jvmArgs('medium')); });
   it('never sets heap size (the launcher library does)', () => {
     for (const t of ['low', 'medium', 'high'] as const) expect(jvmArgs(t).some(x => /^-Xm[sx]/.test(x))).toBe(false);
   });

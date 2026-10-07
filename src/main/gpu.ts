@@ -1,6 +1,7 @@
 import { execFile } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import { isIntegratedGpu } from './perf';
 
 export type Vendor = 'amd' | 'nvidia' | 'intel' | 'other';
 export type Gpu = { name: string; vendor: Vendor };
@@ -22,11 +23,12 @@ export function parseGpuList(text: string): Gpu[] {
 }
 
 /**
- * Предлагаем режим Vulkan, когда в компьютере есть видеокарта AMD и нет NVIDIA, а Vulkan-драйвер установлен.
+ * Предлагаем режим Vulkan, когда в компьютере есть отдельная видеокарта AMD и нет NVIDIA, а Vulkan-драйвер установлен.
+ * Встроенную графику AMD (Radeon Graphics в процессорах Ryzen) не предлагаем: на ней драйвер Vulkan уже ронял игру при старте.
  * Если рядом есть NVIDIA (ноутбук с двумя картами), не предлагаем: у игры может быть выбрана именно она, и мы не знаем, какая рисует.
  */
 export function offerVulkan(gpus: Gpu[], vulkanDriver: boolean): boolean {
-  return vulkanDriver && gpus.some(g => g.vendor === 'amd') && !gpus.some(g => g.vendor === 'nvidia');
+  return vulkanDriver && gpus.some(g => g.vendor === 'amd' && !isIntegratedGpu(g.name)) && !gpus.some(g => g.vendor === 'nvidia');
 }
 
 /** Загрузчик Vulkan (vulkan-1.dll) ставится вместе с драйвером видеокарты. */

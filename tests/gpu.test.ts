@@ -33,7 +33,12 @@ describe('offerVulkan', () => {
     expect(offerVulkan([intel], true)).toBe(false);
   });
   it('does not offer it when an NVIDIA card is next to the AMD one', () => { expect(offerVulkan([amd, nv], true)).toBe(false); });
-  it('offers it for AMD graphics inside a laptop with Intel graphics', () => { expect(offerVulkan([intel, amd], true)).toBe(true); });
+  it('offers it for an AMD card inside a laptop with Intel graphics', () => { expect(offerVulkan([intel, amd], true)).toBe(true); });
+  it('does not offer it for integrated AMD graphics (its Vulkan driver crashed the game on start)', () => {
+    const ryzen = { name: 'AMD Radeon(TM) Graphics', vendor: 'amd' as const };
+    expect(offerVulkan([ryzen], true)).toBe(false);
+    expect(offerVulkan([{ name: 'AMD Radeon(TM) Vega 8 Graphics', vendor: 'amd' as const }], true)).toBe(false);
+  });
 });
 
 import { packUrl } from '../src/main/config';

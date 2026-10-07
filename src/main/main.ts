@@ -15,6 +15,7 @@ import { fetchNews } from './news';
 import { checkSkinPng, uploadSkin } from './skin';
 import { startUpdater, installUpdate, updateReady, checkNow } from './updater';
 import { detectGpus, offerVulkan, vulkanDriverPresent, type Gpu } from './gpu';
+import { vulkanCrashReport } from './crash';
 import { detectHardware, resolveTier, tierOf, autoMemoryMb, jvmArgs, initialHeapMb, applyTierToGameDir, protectCustomOptions, PERF_MODES, type PerfMode } from './perf';
 
 let win: BrowserWindow | null = null;
@@ -173,6 +174,12 @@ ipcMain.handle('ml:play', async () => {
         presence.set('launcher');
         if (code === 0) { send('ml:status', { kind: 'closed' }); return; }
         try { fs.writeFileSync(path.join(gameDir(), 'launcher-last.log'), log.join('')); } catch {}
+        // Игра упала в Vulkan: возвращаем стандартную графику, иначе игрок будет падать при каждом запуске.
+        if (settings.graphics === 'vulkan' && vulkanCrashReport(gameDir(), started)) {
+          settings = { ...settings, graphics: 'standard', vulkanOfferSeen: true }; saveSettings(settings);
+          send('ml:status', { kind: 'error', message: 'VULKAN_CRASH' });
+          return;
+        }
         send('ml:status', { kind: 'error', message: 'CRASH' });
       },
       line => { log.push(line.endsWith('\n') ? line : line + '\n'); if (log.length > 2000) log.shift(); },
